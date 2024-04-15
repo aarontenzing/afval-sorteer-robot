@@ -20,12 +20,12 @@ class Gripper(Node):
 			Float,
 			'distance',
 			self.distance_callback,
-			10)
+			1)
 		self.stateSubscription = self.create_subscription(
 			Int,
 			'currentState',
 			self.state_callback,
-			10)
+			1)
 		
 		self.subscription  # prevent unused variable warning
 		self.publisher = self.create_publisher(Int, 'gripperState', 1)
@@ -52,7 +52,7 @@ class Gripper(Node):
 		if state == 0:
 			claw_pwm.ChangeDutyCycle(0)
 		else:
-			claw_pwm.ChangeDutyCycle(100)
+			claw_pwm.ChangeDutyCycle(20)
 
 		msg = ()
 		msg.data = state
