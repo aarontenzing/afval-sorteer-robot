@@ -1,0 +1,15 @@
+#encryption keys
+git_key
+git_key.pub
+gitkey2
+gitkey2.pub
+
+#.swp files
+*.swp
+
+#temp files
+__pycache__/
+
+build/
+log/
+install/
