@@ -23,7 +23,7 @@ class SonarPublisher(Node):
 	def timer_callback(self):
 		#timeStart = time.time()
 		GPIO.output(TRIGGER, GPIO.HIGH)
-		time.nanosleep(10*1000)
+		time.sleep(0.000010)
 		GPIO.output(TRIGGER, GPIO.LOW)
 		
 		while(not GPIO.input(ECHO)):

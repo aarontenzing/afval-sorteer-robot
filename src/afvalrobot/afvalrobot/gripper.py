@@ -27,7 +27,8 @@ class Gripper(Node):
 			self.state_callback,
 			1)
 		
-		self.subscription  # prevent unused variable warning
+		self.distSubscription  # prevent unused variable warning
+		self.stateSubscription  # prevent unused variable warning
 		self.publisher = self.create_publisher(Int, 'gripperState', 1)
 	
 	def state_callback(self, msg):
