@@ -51,7 +51,7 @@ class Gripper(Node):
 
 	def moveGripper(self, state):
 		if state == 0:
-			claw_pwm.ChangeDutyCycle(0)
+			claw_pwm.ChangeDutyCycle(5)
 		else:
 			claw_pwm.ChangeDutyCycle(15)
 
