@@ -12,18 +12,19 @@ class Wheels(Node):
         self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
     
 	def controlWheels(self, state):
-		linear, angular = 0.0, 0.0
-		# STRAIGHT
 		if state == 0:
+			linear, angular = 0.0, 0.0
+		# STRAIGHT
+		elif state == 1:
 			linear, angular = 1.0, 0.0
 		# RIGHT
-		elif state == 1:
+		elif state == 2:
 			linear, angular = 0.0, -1.0
 		# LEFT
-		elif state == 2:
+		elif state == 3:
 			linear, angular = 0.0, 1.0
 		# BACK 
-		elif state == 3:
+		elif state == 4:
 			linear, angular = -1.0, 0.0
 		else:
 			linear, angular = 0.0, 0.0
