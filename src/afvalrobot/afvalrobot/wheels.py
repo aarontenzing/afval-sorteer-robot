@@ -19,10 +19,10 @@ class Wheels(Node):
 			linear, angular = 0.22, 0.0
 		# RIGHT
 		elif state == 2:
-			linear, angular = 0.0, -1.0
+			linear, angular = 0.0, -2.5
 		# LEFT
 		elif state == 3:
-			linear, angular = 0.0, 1.0
+			linear, angular = 0.0, 2.55
 		# BACK 
 		elif state == 4:
 			linear, angular = -0.22, 0.0

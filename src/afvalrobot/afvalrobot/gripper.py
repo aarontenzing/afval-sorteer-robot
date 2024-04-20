@@ -22,7 +22,7 @@ class Gripper(Node):
 			self.distance_callback,
 			1)
 		self.stateSubscription = self.create_subscription(
-			Int32,
+			Float32,
 			'currentState',
 			self.state_callback,
 			1)
@@ -34,12 +34,12 @@ class Gripper(Node):
 	def state_callback(self, msg):
 		self.currentState = msg.data
 		self.get_logger().info('I heard state: "%s"' % msg.data)
-
+		self.moveGripper(msg.data)
 		#Modify depending on states
-		if self.currentState == 0:
-			self.moveGripper(0)
-		elif self.currentState == 1:
-			self.moveGripper(1)
+		#if self.currentState == 0:
+		#	self.moveGripper(0)
+		#elif self.currentState == 1:
+		#	self.moveGripper(1)
 
 	def distance_callback(self, msg):
 		distance = msg.data
@@ -50,15 +50,16 @@ class Gripper(Node):
 			self.moveGripper(1)
 
 	def moveGripper(self, state):
-		if state == 0:
-			claw_pwm.ChangeDutyCycle(0)
-		else:
-			claw_pwm.ChangeDutyCycle(20)
+		claw_pwm.ChangeDutyCycle(state)
+		#if state == 0:
+		#	claw_pwm.ChangeDutyCycle(7)
+		#else:
+		#	claw_pwm.ChangeDutyCycle(12)
 
-		msg = Int32()
-		msg.data = state
-		self.publisher.publish(msg)
-		self.get_logger().info('Publishing: "%s"' % msg.data)
+		#msg = Int32()
+		#msg.data = state
+		#self.publisher.publish(msg)
+		#self.get_logger().info('Publishing: "%s"' % msg.data)
 
 
 def main(args=None):
