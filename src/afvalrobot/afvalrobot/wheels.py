@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int8
+from std_msgs.msg import Int32
 from geometry_msgs.msg import Twist
 
 class Wheels(Node):
@@ -41,7 +41,7 @@ class Wheels(Node):
 		self.get_logger().info('I heard state: "%s"' % msg.data)
 
 		#Modify depending on states
-		controlWheels(self.currentState) 
+		self.controlWheels(self.currentState) 
 	
 def main(args=None):
 	rclpy.init(args=args)
