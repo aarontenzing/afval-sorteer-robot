@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 import RPi.GPIO as GPIO
 import time
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Int32
 
 CLAW = 13
 
@@ -22,7 +22,7 @@ class Gripper(Node):
 			self.distance_callback,
 			1)
 		self.stateSubscription = self.create_subscription(
-			Int,
+			Int32,
 			'currentState',
 			self.state_callback,
 			1)
