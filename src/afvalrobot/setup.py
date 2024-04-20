@@ -23,6 +23,7 @@ setup(
         'console_scripts': [
             'sonar = afvalrobot.sonar:main',
             'gripper = afvalrobot.gripper:main',
+            'wheels = afvalrobot.wheels:main',
         ],
     },
 )
