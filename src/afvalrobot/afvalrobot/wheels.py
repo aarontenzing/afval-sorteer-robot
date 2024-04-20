@@ -17,9 +17,9 @@ class Wheels(Node):
 	def controlWheels(self, state):
 		if state == 0:
 			linear, angular = 0.0, 0.0
-		# STRAIGHT
+		# FORWARD
 		elif state == 1:
-			linear, angular = 0.1, 0.0
+			linear, angular = -0.1, 0.0
 		# RIGHT
 		elif state == 2:
 			linear, angular = 0.0, -2.5
@@ -28,7 +28,7 @@ class Wheels(Node):
 			linear, angular = 0.0, 2.55
 		# BACK 
 		elif state == 4:
-			linear, angular = -0.1, 0.0
+			linear, angular = 0.1, 0.0
 		else:
 			linear, angular = 0.0, 0.0
 		
