@@ -16,7 +16,7 @@ class Wheels(Node):
 			linear, angular = 0.0, 0.0
 		# STRAIGHT
 		elif state == 1:
-			linear, angular = 1.0, 0.0
+			linear, angular = 0.22, 0.0
 		# RIGHT
 		elif state == 2:
 			linear, angular = 0.0, -1.0
@@ -25,7 +25,7 @@ class Wheels(Node):
 			linear, angular = 0.0, 1.0
 		# BACK 
 		elif state == 4:
-			linear, angular = -1.0, 0.0
+			linear, angular = -0.22, 0.0
 		else:
 			linear, angular = 0.0, 0.0
 		
