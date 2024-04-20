@@ -37,9 +37,9 @@ class Gripper(Node):
 
 		#Modify depending on states
 		if self.currentState == 0:
-			moveGripper(0)
+			self.moveGripper(0)
 		elif self.currentState == 1:
-			moveGripper(1)
+			self.moveGripper(1)
 
 	def distance_callback(self, msg):
 		distance = msg.data
@@ -47,7 +47,7 @@ class Gripper(Node):
 
 		#Change state and distance to correct values
 		if self.currentState == 2 and distance < 10:
-			moveGripper(1)
+			self.moveGripper(1)
 
 	def moveGripper(self, state):
 		if state == 0:
