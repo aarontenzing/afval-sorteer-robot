@@ -8,7 +8,7 @@ class Wheels(Node):
 	def __init__(self):
 		super().__init__('wheels')
 		self.currentState = 0
-		self.stateSubscription = self.create_subscription(Int8, 'currentState', self.state_callback, 1)		   
+		self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)		   
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 	
 	def controlWheels(self, state):
