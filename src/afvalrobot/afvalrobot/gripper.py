@@ -55,7 +55,7 @@ class Gripper(Node):
 		else:
 			claw_pwm.ChangeDutyCycle(20)
 
-		msg = ()
+		msg = Int32()
 		msg.data = state
 		self.publisher.publish(msg)
 		self.get_logger().info('Publishing: "%s"' % msg.data)

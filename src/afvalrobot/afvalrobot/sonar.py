@@ -40,7 +40,7 @@ class SonarPublisher(Node):
 		#timeEcho = time.time()
 		#distance = ((timeEcho - timeStart) * 340)/2
 		
-		msg = ()
+		msg = Int32()
 		msg.data = distance
 		self.publisher_.publish(msg)
 		self.get_logger().info('Publishing: "%s"' % msg.data)
