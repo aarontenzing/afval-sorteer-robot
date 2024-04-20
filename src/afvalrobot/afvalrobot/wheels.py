@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float, Int8
+from std_msgs.msg import Int8
 from geometry_msgs.msg import Twist
 
 class Wheels(Node):
