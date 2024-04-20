@@ -5,12 +5,12 @@ from geometry_msgs.msg import Twist
 
 class Wheels(Node):
 
-    def __init__(self):
-    	super().__init__('wheels')
+	def __init__(self):
+		super().__init__('wheels')
 		self.currentState = 0
-		self.stateSubscription = self.create_subscription(Int8, 'currentState', self.state_callback, 1)        
-        self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
-    
+		self.stateSubscription = self.create_subscription(Int8, 'currentState', self.state_callback, 1)		   
+		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
+	
 	def controlWheels(self, state):
 		if state == 0:
 			linear, angular = 0.0, 0.0
@@ -30,7 +30,7 @@ class Wheels(Node):
 			linear, angular = 0.0, 0.0
 		
 		cmd = Twist()
-		cmd.linear.x =  linear
+		cmd.linear.x =	linear
 		cmd.angular.z = angular
 
 		self.wheelsPublisher.publish(cmd)
@@ -45,12 +45,12 @@ class Wheels(Node):
 	
 def main(args=None):
 	rclpy.init(args=args)
-    wheels = Wheels()
+	wheels = Wheels()
 
-    rclpy.spin(wheels)
+	rclpy.spin(wheels)
 
-    wheels.destroy_node()
-    rclpy.shutdown()
+	wheels.destroy_node()
+	rclpy.shutdown()
 
 if __name__ == "__main__":
 	main()
