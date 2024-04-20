@@ -53,7 +53,7 @@ class Gripper(Node):
 		if state == 0:
 			claw_pwm.ChangeDutyCycle(0)
 		else:
-			claw_pwm.ChangeDutyCycle(20)
+			claw_pwm.ChangeDutyCycle(15)
 
 		msg = Int32()
 		msg.data = state
