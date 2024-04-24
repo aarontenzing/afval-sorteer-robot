@@ -17,7 +17,7 @@ class Wheels(Node):
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
 	
-	def search(self, state):
+	def search(self):
 		cmd = Twist()
 		while(self.distance > 10 and self.currentState == 0):
 			# drive forward 5 seconds
