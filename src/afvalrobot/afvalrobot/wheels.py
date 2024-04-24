@@ -12,6 +12,7 @@ class Wheels(Node):
 	def __init__(self):
 		super().__init__('wheels')
 		self.currentState = 0
+		self.distance = 20
 		self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)		   
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
@@ -59,7 +60,6 @@ class Wheels(Node):
 	def state_callback(self, msg):
 		self.currentState = msg.data
 		self.get_logger().info('I heard state: "%s"' % msg.data)
-
 		#Modify depending on states
 		self.controlWheels(self.currentState) 
 
