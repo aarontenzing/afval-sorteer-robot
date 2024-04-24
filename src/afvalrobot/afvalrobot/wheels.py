@@ -17,6 +17,12 @@ class Wheels(Node):
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
 	
+	def stop(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = 0.0, 0.0
+		self.wheelsPublisher.publish(cmd)
+
+
 	def search(self):
 		cmd = Twist()
 		while(self.distance > 10 and self.currentState == 0):
@@ -40,10 +46,9 @@ class Wheels(Node):
 		if state == 0:
 			self.search()
 
-		# STOP
+		# Stop
 		elif state == 1:
-			linear, angular = 0.0, 0.0
-			
+			self.stop()
 		
 	def state_callback(self, msg):
 		self.currentState = msg.data
