@@ -18,7 +18,7 @@ class Wheels(Node):
 	
 	def search(self):
 		cmd = Twist()
-		while(self.distance_callback > 10):
+		while(self.distance > 10):
 			# drive forward 5 seconds
 			cmd.linear.x, cmd.angular.z = 0.1, 0.0
 			self.wheelsPublisher.publish(cmd)
@@ -37,7 +37,7 @@ class Wheels(Node):
 		
 		# Search object
 		if state == 0:
-			while (1):
+			while (True):
 				self.search()
 
 		# FORWARD
