@@ -17,11 +17,11 @@ class Wheels(Node):
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
 	
-	def search(self):
+	def search(self, state):
 		cmd = Twist()
-		while(self.distance > 10):
+		while(self.distance > 10 and self.currentState == 0):
 			# drive forward 5 seconds
-			cmd.linear.x, cmd.angular.z = 0.1, 0.0
+			cmd.linear.x, cmd.angular.z = -0.1, 0.0
 			self.wheelsPublisher.publish(cmd)
 			time.sleep(5)
 			# turn for 1 second
@@ -38,22 +38,10 @@ class Wheels(Node):
 		
 		# Search object
 		if state == 0:
-			while (True):
-				self.search()
+			self.search()
 
-		# FORWARD
+		# STOP
 		elif state == 1:
-			linear, angular = -0.1, 0.0
-		# RIGHT
-		elif state == 2:
-			linear, angular = 0.0, -2.5
-		# LEFT
-		elif state == 3:
-			linear, angular = 0.0, 2.55
-		# BACK 
-		elif state == 4:
-			linear, angular = 0.1, 0.0
-		else:
 			linear, angular = 0.0, 0.0
 			
 		
