@@ -32,6 +32,7 @@ class Gripper(Node):
 		self.distSubscription  # prevent unused variable warning
 		self.stateSubscription  # prevent unused variable warning
 		self.publisher = self.create_publisher(Int32, 'gripperState', 1)
+		self.singleFlag = False
 	
 	def state_callback(self, msg):
 		self.currentState = msg.data
@@ -40,10 +41,12 @@ class Gripper(Node):
 		# State 0 -> searching for thash, gripper closed.
 		if self.currentState == 0:
 			self.moveGripper(0)
+			self.singleFlag = True
 
 		# State 1 -> trash found, open gripper
-		elif self.currentState == 1:
+		elif self.currentState == 1 and singleFlag == True:
 			self.moveGripper(1)
+			singleFlag = False
 		elif self.currentState == 3:
 			self.moveGripper(1)
 
