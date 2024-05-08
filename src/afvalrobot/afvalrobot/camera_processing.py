@@ -63,7 +63,7 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        
+        self.get_logger().info(detect_cola_can(frame))
 
         return
 
@@ -92,6 +92,42 @@ class CameraProcessing(Node):
             #self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
 
+def detect_cola_can(image):
+
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_red = np.array([0, 120, 70])
+    upper_red = np.array([10, 255, 255])
+    lower_red2 = np.array([170, 120, 70])
+    upper_red2 = np.array([180, 255, 255])
+    mask1 = cv2.inRange(hsv, lower_red, upper_red)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+    mask = mask1 + mask2
+    
+
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    image_center_x = image.shape[1] / 2
+    middle_tolerance = image.shape[1] * 0.10 
+    min_area_threshold = 50
+
+   
+    if contours:
+        largest_contour = max(contours, key=cv2.contourArea)
+        if cv2.contourArea(largest_contour) < min_area_threshold:
+            return "Can is too small or not detected"
+        else:
+            M = cv2.moments(largest_contour)
+            if M["m00"] != 0:
+
+                cx = int(M["m10"] / M["m00"])
+                if cx < image_center_x - middle_tolerance:
+                    return "left"
+                elif cx > image_center_x + middle_tolerance:
+                    return "right"
+                else:
+                    return "middle"
+    else:
+        return "Can not detected"
 
 def main(args = None):
     rclpy.init(args = args)
