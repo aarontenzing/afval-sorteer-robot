@@ -42,7 +42,7 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = 0.0, 1.0 
 		self.wheelsPublisher.publish(cmd)
 		# rotate
-		while(self.currentState == 0 and self.distance < 10 and time.time() - start < 3):
+		while(self.currentState == 0 and time.time() - start < 3):
 			pass
 
 
