@@ -53,12 +53,13 @@ class Wheels(Node):
 		self.wheelsPublisher.publish(cmd)
 		# Drive to object
 		while (self.distance > 5 and self.currentState == 1):
-			self.get_logger().info('I heard sate in while loop: "%s"' % self.currentState)
+			self.get_logger().info('I heard state in while loop: "%s"' % self.currentState)
 			self.state_callback()
 			time.sleep(1)
 			pass
 		# Stop
 		self.stop()
+		time.sleep(2)
 
 	def controlWheels(self, state):
 		
