@@ -76,7 +76,7 @@ class CameraProcessing(Node):
             self.get_logger().info('Failed to read frame from camera')
             return
         var1, var2, var3, idfound= self.poseEstimation(frame)
-        msg = {}
+        msg = String()
         if (self.currentState == 0) & (id in self.trash):
             msg.data = "Thrash found"
         elif (self.currentState == 1) & (id in self.trash):
