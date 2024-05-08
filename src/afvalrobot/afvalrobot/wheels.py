@@ -51,7 +51,9 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
 		# Drive to object
-		while (self.distance > 1):
+		while (self.distance > 5 and self.currentState == 1):
+			self.get_logger().info('I heard sate in while loop: "%s"' % self.currentState)
+			time.sleep(1)
 			pass
 		# Stop
 		self.stop()
@@ -78,7 +80,7 @@ class Wheels(Node):
 
 	def distance_callback(self, msg):
 		self.distance = msg.data
-		#self.get_logger().info('I heard distance: "%s"' % msg.data)
+		self.get_logger().info('I heard distance: "%s"' % msg.data)
 	
 def main(args=None):
 	rclpy.init(args=args)
