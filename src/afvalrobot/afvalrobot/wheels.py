@@ -51,7 +51,7 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
 		# Drive to object
-		while (self.distance > 1):
+		while (self.distance > 5 and self.currentState == 1):
 			pass
 		# Stop
 		self.stop()
