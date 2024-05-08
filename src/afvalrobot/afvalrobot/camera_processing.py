@@ -86,7 +86,7 @@ class CameraProcessing(Node):
         else:
             msg.data = ""
         msg.data = str(idfound)
-        self.publisher.publish(msg)
+        self.publisher_.publish(msg)
     
     def state_callback(self, msg):
         self.currentState = msg.data
