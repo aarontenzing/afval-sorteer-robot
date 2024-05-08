@@ -32,7 +32,7 @@ class SonarPublisher(Node):
 		while(GPIO.input(ECHO)):
 			timeEcho = time.time_ns()   
 
-		distance = (timeEcho - timeStart)/(58*1000)
+		distance = (float)(timeEcho - timeStart)/(58*1000)
 
 		#test if timeout is needed
 		#while(not GPIO.input(ECHO)):
