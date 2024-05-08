@@ -87,6 +87,7 @@ class CameraProcessing(Node):
             msg.data = ""
         msg.data = str(idfound)
         self.publisher_.publish(msg)
+        self.get_logger().info('I found id: %s' %msg.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
@@ -101,6 +102,7 @@ class CameraProcessing(Node):
         if self.currentState == 0:
             self.object_detect()
         else:
+            self.get_logger().info('I execute vuilback_detect')
             self.vuilbak_detect()
 
 
