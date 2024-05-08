@@ -57,7 +57,12 @@ class CameraProcessing(Node):
                     return distance, h, 1, id
         return 1.5,0,0,-1
 
-    def timer_callback(self):
+
+    def object_detect(self):
+        return
+
+
+    def vuilbak_detect(self):
         self.camera.set(cv2.CAP_PROP_POS_FRAMES, 0)
         ret, frame = self.camera.read() # Read single frame from camera
         if not ret:
@@ -65,15 +70,15 @@ class CameraProcessing(Node):
             return
         var1, var2, var3, idfound= self.poseEstimation(frame)
         msg = {}
-        if (currentState == 0) & (id in trash):
+        if (self.currentState == 0) & (id in self.trash):
             msg.data = "Thrash found"
-        elif (currentState == 1) & (id in trash):
+        elif (self.currentState == 1) & (id in self.trash):
             msg.data = "Location trash:" + str(var1) + ";" + str(var2) + ";" + str(var3)
-        elif (currentState == 2) & (id in trashcans):
+        elif (self.currentState == 2) & (id in self.trashcans):
             msg.data = "Trashcan found"
         else:
             msg.data = ""
-        msg.data = idfound.
+        msg.data = idfound
         self.publisher.publish(msg)
     
     def state_callback(self, msg):
@@ -81,7 +86,16 @@ class CameraProcessing(Node):
         self.get_logger().info('I heard state: %s' % msg.data)
         # Modify depending on states
         if self.currentState == 1:
-            timer_callback()
+            self.timer_callback()
+
+
+
+    def timer_callback(self):
+        if self.currentState == 0:
+            self.object_detect()
+        else:
+            self.vuilbak_detect()
+
 
 def main(args = None):
     rclpy.init(args = args)
