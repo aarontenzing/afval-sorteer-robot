@@ -22,23 +22,41 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = 0.0, 0.0
 		self.wheelsPublisher.publish(cmd)
 
-
 	def search(self):
+		# drive forward 5 seconds
 		cmd = Twist()
-		while(self.distance > 10 and self.currentState == 0):
-			# drive forward 5 seconds
-			cmd.linear.x, cmd.angular.z = -0.1, 0.0
-			self.wheelsPublisher.publish(cmd)
-			time.sleep(5)
-			# turn for 1 second
-			cmd.linear.x, cmd.angular.z = 0.0, 1.0
-			self.wheelsPublisher.publish(cmd)
-			time.sleep(1)
-		
-		# turn for 3 second 
-		cmd.linear.x, cmd.angular.z = 0.0, 1.0
+		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
-		time.sleep(3)
+		
+		start = time.time()		
+		while(self.distance > 10 and self.currentState == 0 and time.time() - start < 5):
+			pass
+
+		#self.stop() # stop driving
+		#time.sleep(1)
+		
+		if self.currentState != 0: 
+			return
+		
+		cmd.linear.x, cmd.angular.z = 0.0, 1.0 
+		self.wheelsPublisher.publish(cmd)
+		
+		start = time.time()
+		while(self.currentState == 0 and time.time() - start < 3):
+			pass
+
+
+	def get_object(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = -0.1, 0.0
+		self.wheelsPublisher.publish(cmd)
+		# Drive to object
+		while (self.distance > 5 and self.currentState == 1):
+			self.get_logger().info('I heard state in while loop: "%s"' % self.currentState)
+			pass
+		# Stop
+		self.stop()
+		time.sleep(2)
 
 	def controlWheels(self, state):
 		
@@ -46,14 +64,18 @@ class Wheels(Node):
 		if state == 0:
 			self.search()
 
-		# Stop
+		# Found object
 		elif state == 1:
+			self.get_object()
+
+		# Stop
+		elif state == 2:
 			self.stop()
 		
 	def state_callback(self, msg):
 		self.currentState = msg.data
 		self.get_logger().info('I heard state: "%s"' % msg.data)
-		#Modify depending on states
+		# Modify depending on states
 		self.controlWheels(self.currentState) 
 
 	def distance_callback(self, msg):
