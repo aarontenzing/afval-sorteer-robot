@@ -108,7 +108,7 @@ def detect_cola_can(image):
     
     image_center_x = image.shape[1] / 2
     middle_tolerance = image.shape[1] * 0.10 
-    min_area_threshold = 50
+    min_area_threshold = 200
 
    
     if contours:
