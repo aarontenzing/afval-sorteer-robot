@@ -36,7 +36,7 @@ class Gripper(Node):
 	
 	def state_callback(self, msg):
 		self.currentState = msg.data
-		self.get_logger().info('I heard state: "%s"' % msg.data)
+		#self.get_logger().info('I heard state: "%s"' % msg.data)
 		#Modify depending on states
 		# State 0 -> searching for thash, gripper closed.
 		if self.currentState == 0:
@@ -52,7 +52,7 @@ class Gripper(Node):
 
 	def distance_callback(self, msg):
 		distance = msg.data
-		self.get_logger().info('I heard distance: "%s"' % msg.data)
+		#self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		#Change state and distance to correct values
 		# State 1 and trash is close enough and gripper is open -> close gripper
