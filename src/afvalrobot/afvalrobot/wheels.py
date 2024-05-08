@@ -33,19 +33,18 @@ class Wheels(Node):
 			pass
 
 		self.stop() # stop driving
+		time.sleep(1)
 		
 		if self.currentState != 0: 
 			return
+		
+		start = time.time()
+		cmd.linear.x, cmd.angular.z = 0.0, 1.0 
+		self.wheelsPublisher.publish(cmd)
+		# rotate
+		while(self.currentState == 0 and self.distance < 10 and time.time() - start < 3):
+			pass
 
-		# turn for 3 second 
-		if self.distance < 10:
-			cmd.linear.x, cmd.angular.z = 0.0, 1.0 
-			self.wheelsPublisher.publish(cmd)
-			
-			start = time.time()
-			while(self.currentState == 0 and time.time() - start < 3):
-				pass
-			
 
 	def get_object(self):
 		cmd = Twist()
