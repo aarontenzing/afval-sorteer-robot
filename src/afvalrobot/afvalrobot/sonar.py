@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 import RPi.GPIO as GPIO
 import time
-from std_msgs.msg import Float32
+from std_msgs.msg import Float64
 
 TRIGGER = 10
 ECHO = 11
@@ -15,7 +15,7 @@ class SonarPublisher(Node):
 
 	def __init__(self):
 		super().__init__('sonar_publisher')
-		self.publisher_ = self.create_publisher(Float32, 'distance', 1)
+		self.publisher_ = self.create_publisher(Float64, 'distance', 1)
 		timer_period = 0.5  # seconds
 		self.timer = self.create_timer(timer_period, self.timer_callback)
 		
@@ -40,7 +40,7 @@ class SonarPublisher(Node):
 		#timeEcho = time.time()
 		#distance = ((timeEcho - timeStart) * 340)/2
 		
-		msg = Float32() 
+		msg = Float64() 
 		msg.data = distance
 		self.publisher_.publish(msg)
 		self.get_logger().info('Publishing: "%s"' % msg.data)
