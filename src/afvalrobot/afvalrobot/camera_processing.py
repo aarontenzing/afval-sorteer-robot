@@ -85,7 +85,7 @@ class CameraProcessing(Node):
             msg.data = "Trashcan found"
         else:
             msg.data = ""
-        msg.data = idfound
+        msg.data = str(idfound)
         self.publisher.publish(msg)
     
     def state_callback(self, msg):
