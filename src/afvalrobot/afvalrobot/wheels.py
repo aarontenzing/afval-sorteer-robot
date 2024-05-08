@@ -69,7 +69,7 @@ class Wheels(Node):
 			self.get_object()
 
 		# Stop
-		elif state == 1:
+		elif state == 2:
 			self.stop()
 		
 	def state_callback(self, msg):
@@ -80,7 +80,7 @@ class Wheels(Node):
 
 	def distance_callback(self, msg):
 		self.distance = msg.data
-		self.get_logger().info('I heard distance: "%s"' % msg.data)
+		#self.get_logger().info('I heard distance: "%s"' % msg.data)
 	
 def main(args=None):
 	rclpy.init(args=args)
