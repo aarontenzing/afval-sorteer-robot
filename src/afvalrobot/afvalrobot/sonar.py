@@ -32,7 +32,7 @@ class SonarPublisher(Node):
 		while(GPIO.input(ECHO)):
 			timeEcho = time.time_ns()   
 
-		distance = (timeEcho - timeStart)/(58*1000)
+		distance = (float)(timeEcho - timeStart)/(58*1000)
 
 		#test if timeout is needed
 		#while(not GPIO.input(ECHO)):
@@ -40,7 +40,7 @@ class SonarPublisher(Node):
 		#timeEcho = time.time()
 		#distance = ((timeEcho - timeStart) * 340)/2
 		
-		msg = Int32()
+		msg = Float32() 
 		msg.data = distance
 		self.publisher_.publish(msg)
 		self.get_logger().info('Publishing: "%s"' % msg.data)

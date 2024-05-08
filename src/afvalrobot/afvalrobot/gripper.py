@@ -5,6 +5,8 @@ import time
 from std_msgs.msg import Float32, Int32
 
 CLAW = 13
+CLOSING_DISTANCE = 5
+
 
 GPIO.setmode(GPIO.BCM) #BCM is GPIO number
 GPIO.setup(CLAW, GPIO.OUT)
@@ -30,14 +32,22 @@ class Gripper(Node):
 		self.distSubscription  # prevent unused variable warning
 		self.stateSubscription  # prevent unused variable warning
 		self.publisher = self.create_publisher(Int32, 'gripperState', 1)
+		self.singleFlag = False
 	
 	def state_callback(self, msg):
 		self.currentState = msg.data
 		self.get_logger().info('I heard state: "%s"' % msg.data)
 		#Modify depending on states
+		# State 0 -> searching for thash, gripper closed.
 		if self.currentState == 0:
 			self.moveGripper(0)
-		elif self.currentState == 1:
+			self.singleFlag = True
+
+		# State 1 -> trash found, open gripper
+		elif self.currentState == 1 and singleFlag == True:
+			self.moveGripper(1)
+			singleFlag = False
+		elif self.currentState == 3:
 			self.moveGripper(1)
 
 	def distance_callback(self, msg):
@@ -45,8 +55,9 @@ class Gripper(Node):
 		self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		#Change state and distance to correct values
-		if self.currentState == 2 and distance < 10:
-			self.moveGripper(1)
+		# State 1 and trash is close enough and gripper is open -> close gripper
+		if self.currentState == 1 and distance < CLOSING_DISTANCE:
+			self.moveGripper(0)
 
 	def moveGripper(self, state):
 		if state == 0:
