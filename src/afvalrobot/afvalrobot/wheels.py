@@ -22,29 +22,51 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = 0.0, 0.0
 		self.wheelsPublisher.publish(cmd)
 
-
 	def search(self):
+		# drive forward 5 seconds
 		cmd = Twist()
-		while(self.distance > 10 and self.currentState == 0):
-			# drive forward 5 seconds
-			cmd.linear.x, cmd.angular.z = -0.1, 0.0
-			self.wheelsPublisher.publish(cmd)
-			time.sleep(5)
-			# turn for 1 second
-			cmd.linear.x, cmd.angular.z = 0.0, 1.0
-			self.wheelsPublisher.publish(cmd)
-			time.sleep(1)
-		
-		# turn for 3 second 
-		cmd.linear.x, cmd.angular.z = 0.0, 1.0
+		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
-		time.sleep(3)
+		
+		start = time.time()		
+		while(self.distance > 10 and self.currentState == 0 and time.time() - start < 5):
+			pass
+
+		self.stop() # stop driving
+		
+		if self.currentState != 0: 
+			return
+
+		# turn for 3 second 
+		if self.distance < 10:
+			cmd.linear.x, cmd.angular.z = 0.0, 1.0 
+			self.wheelsPublisher.publish(cmd)
+			
+			start = time.time()
+			while(self.currentState == 0 and time.time() - start < 3):
+				pass
+			
+
+	def get_object(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = -0.1, 0.0
+		self.wheelsPublisher.publish(cmd)
+		# Drive to object
+		while (self.distance > 1):
+			pass
+			
+		# Stop
+		self.stop()
 
 	def controlWheels(self, state):
 		
 		# Search object
 		if state == 0:
 			self.search()
+
+		# Found object
+		elif state == 1:
+			self.get_object()
 
 		# Stop
 		elif state == 1:
