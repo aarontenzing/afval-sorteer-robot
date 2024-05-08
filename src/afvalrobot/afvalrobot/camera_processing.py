@@ -20,8 +20,7 @@ class CameraProcessing(Node):
         self.cm = np.array([[823.93985557, 0., 322.76228491], [0., 825.11141958, 279.6240493], [0., 0., 1.]]) # Correction for cameralens
         self.parameters = cv2.aruco.DetectorParameters()
         self.ms = 0.1
-        self.trash = [0,1]
-        self.trashcans = [2, 3]
+        self.trashcans = [1, 3]
         self.detector = cv2.aruco.ArucoDetector(self.dictionary, self.parameters)
         self.dm = np.array([[6.29137073e-02, -7.33484417e-01, 6.53444356e-03, 3.83894903e-03, 1.16325776e+01]])
         self.timer = self.create_timer(0.3, self.timer_callback)
@@ -48,7 +47,7 @@ class CameraProcessing(Node):
         corners, ids, rejected_img_points = self.detector.detectMarkers(gray)
         if len(corners) > 0:    
             for i, id in enumerate(ids):
-                if id not in self.trash | id not in self.trashcans: # None valuable IDs 
+                if id not in self.trashcans: # None valuable IDs 
                     continue
                 rvec, tvec, rejimp= self.estimatePoseSingleMarkers(corners[i]) # Corners of marker on screen are input, translation and rotation of aruco are output
                 if len(tvec)!=0: 
@@ -64,37 +63,25 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        
+        self.get_logger().info(detect_cola_can(frame))
 
         return
 
 
-    def vuilbak_detect(self):
+    def trashcan_detect(self):
         self.camera.set(cv2.CAP_PROP_POS_FRAMES, 0)
         ret, frame = self.camera.read() # Read single frame from camera
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        var1, var2, var3, idfound= self.poseEstimation(frame)
+        var1, var2, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        if (self.currentState == 0) & (id in self.trash):
-            msg.data = "Thrash found"
-        elif (self.currentState == 1) & (id in self.trash):
-            msg.data = "Location trash:" + str(var1) + ";" + str(var2) + ";" + str(var3)
-        elif (self.currentState == 2) & (id in self.trashcans):
-            msg.data = "Trashcan found"
-        else:
-            msg.data = ""
-        msg.data = str(idfound)
+        msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         self.publisher_.publish(msg)
-        self.get_logger().info('I found id: %s' %msg.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
         self.get_logger().info('I heard state: %s' % msg.data)
-        # Modify depending on states
-        if self.currentState == 1:
-            self.timer_callback()
 
 
 
@@ -102,9 +89,45 @@ class CameraProcessing(Node):
         if self.currentState == 0:
             self.object_detect()
         else:
-            self.get_logger().info('I execute vuilback_detect')
-            self.vuilbak_detect()
+            #self.get_logger().info('I execute vuilback_detect')
+            self.trashcan_detect()
 
+def detect_cola_can(image):
+
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_red = np.array([0, 120, 70])
+    upper_red = np.array([10, 255, 255])
+    lower_red2 = np.array([170, 120, 70])
+    upper_red2 = np.array([180, 255, 255])
+    mask1 = cv2.inRange(hsv, lower_red, upper_red)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+    mask = mask1 + mask2
+    
+
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    image_center_x = image.shape[1] / 2
+    middle_tolerance = image.shape[1] * 0.10 
+    min_area_threshold = 200
+
+   
+    if contours:
+        largest_contour = max(contours, key=cv2.contourArea)
+        if cv2.contourArea(largest_contour) < min_area_threshold:
+            return "Can is too small or not detected"
+        else:
+            M = cv2.moments(largest_contour)
+            if M["m00"] != 0:
+
+                cx = int(M["m10"] / M["m00"])
+                if cx < image_center_x - middle_tolerance:
+                    return "left"
+                elif cx > image_center_x + middle_tolerance:
+                    return "right"
+                else:
+                    return "middle"
+    else:
+        return "Can not detected"
 
 def main(args = None):
     rclpy.init(args = args)
