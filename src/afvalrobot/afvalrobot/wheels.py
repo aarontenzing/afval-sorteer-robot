@@ -52,6 +52,7 @@ class Wheels(Node):
 		self.wheelsPublisher.publish(cmd)
 		# Drive to object
 		while (self.distance > 5 and self.currentState == 1):
+			self.get_logger().info('I heard distance: "%s"' % self.currentState)
 			pass
 		# Stop
 		self.stop()
@@ -78,7 +79,7 @@ class Wheels(Node):
 
 	def distance_callback(self, msg):
 		self.distance = msg.data
-		#self.get_logger().info('I heard distance: "%s"' % msg.data)
+		self.get_logger().info('I heard distance: "%s"' % msg.data)
 	
 def main(args=None):
 	rclpy.init(args=args)
