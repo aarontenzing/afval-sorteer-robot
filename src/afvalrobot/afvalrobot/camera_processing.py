@@ -12,7 +12,7 @@ class CameraProcessing(Node):
         
         self.currentState = 0
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
-        self.subscription # Prevent unused variable warning
+
 
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
         self.camera = cv2.VideoCapture(0)
@@ -59,6 +59,13 @@ class CameraProcessing(Node):
 
 
     def object_detect(self):
+        self.camera.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        ret, frame = self.camera.read() 
+        if not ret:
+            self.get_logger().info('Failed to read frame from camera')
+            return
+        
+
         return
 
 
@@ -69,7 +76,7 @@ class CameraProcessing(Node):
             self.get_logger().info('Failed to read frame from camera')
             return
         var1, var2, var3, idfound= self.poseEstimation(frame)
-        msg = {}
+        msg = String()
         if (self.currentState == 0) & (id in self.trash):
             msg.data = "Thrash found"
         elif (self.currentState == 1) & (id in self.trash):
@@ -78,8 +85,8 @@ class CameraProcessing(Node):
             msg.data = "Trashcan found"
         else:
             msg.data = ""
-        msg.data = idfound
-        self.publisher.publish(msg)
+        msg.data = str(idfound)
+        self.publisher_.publish(msg)
     
     def state_callback(self, msg):
         self.currentState = msg.data
