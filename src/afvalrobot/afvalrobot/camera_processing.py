@@ -20,8 +20,7 @@ class CameraProcessing(Node):
         self.cm = np.array([[823.93985557, 0., 322.76228491], [0., 825.11141958, 279.6240493], [0., 0., 1.]]) # Correction for cameralens
         self.parameters = cv2.aruco.DetectorParameters()
         self.ms = 0.1
-        self.trash = [0,1]
-        self.trashcans = [2, 3]
+        self.trashcans = [1, 3]
         self.detector = cv2.aruco.ArucoDetector(self.dictionary, self.parameters)
         self.dm = np.array([[6.29137073e-02, -7.33484417e-01, 6.53444356e-03, 3.83894903e-03, 1.16325776e+01]])
         self.timer = self.create_timer(0.3, self.timer_callback)
@@ -69,32 +68,20 @@ class CameraProcessing(Node):
         return
 
 
-    def vuilbak_detect(self):
+    def trashcan_detect(self):
         self.camera.set(cv2.CAP_PROP_POS_FRAMES, 0)
         ret, frame = self.camera.read() # Read single frame from camera
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        var1, var2, var3, idfound= self.poseEstimation(frame)
+        var1, var2, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        if (self.currentState == 0) & (id in self.trash):
-            msg.data = "Thrash found"
-        elif (self.currentState == 1) & (id in self.trash):
-            msg.data = "Location trash:" + str(var1) + ";" + str(var2) + ";" + str(var3)
-        elif (self.currentState == 2) & (id in self.trashcans):
-            msg.data = "Trashcan found"
-        else:
-            msg.data = ""
-        msg.data = str(idfound)
+        msg.data = "Location trashcan id " + idfound + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         self.publisher_.publish(msg)
-        self.get_logger().info('I found id: %s' %msg.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
         self.get_logger().info('I heard state: %s' % msg.data)
-        # Modify depending on states
-        if self.currentState == 1:
-            self.timer_callback()
 
 
 
@@ -102,8 +89,8 @@ class CameraProcessing(Node):
         if self.currentState == 0:
             self.object_detect()
         else:
-            self.get_logger().info('I execute vuilback_detect')
-            self.vuilbak_detect()
+            #self.get_logger().info('I execute vuilback_detect')
+            self.trashcan_detect()
 
 
 def main(args = None):
