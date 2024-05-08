@@ -47,7 +47,7 @@ class CameraProcessing(Node):
         corners, ids, rejected_img_points = self.detector.detectMarkers(gray)
         if len(corners) > 0:    
             for i, id in enumerate(ids):
-                if id not in self.trash | id not in self.trashcans: # None valuable IDs 
+                if id not in self.trashcans: # None valuable IDs 
                     continue
                 rvec, tvec, rejimp= self.estimatePoseSingleMarkers(corners[i]) # Corners of marker on screen are input, translation and rotation of aruco are output
                 if len(tvec)!=0: 
