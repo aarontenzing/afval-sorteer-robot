@@ -38,12 +38,12 @@ class Wheels(Node):
 		if self.currentState != 0: 
 			return
 		
-		start = time.time()
 		cmd.linear.x, cmd.angular.z = 0.0, 1.0 
 		self.wheelsPublisher.publish(cmd)
-		# rotate
+		start = time.time()
+		# rotate for 3 seconds
 		while(self.currentState == 0 and time.time() - start < 3):
-			pass
+			print(time.time() - start)
 
 
 	def get_object(self):
@@ -53,7 +53,6 @@ class Wheels(Node):
 		# Drive to object
 		while (self.distance > 1):
 			pass
-			
 		# Stop
 		self.stop()
 
@@ -74,7 +73,7 @@ class Wheels(Node):
 	def state_callback(self, msg):
 		self.currentState = msg.data
 		self.get_logger().info('I heard state: "%s"' % msg.data)
-		#Modify depending on states
+		# Modify depending on states
 		self.controlWheels(self.currentState) 
 
 	def distance_callback(self, msg):
