@@ -44,9 +44,9 @@ class Gripper(Node):
 			self.singleFlag = True
 
 		# State 1 -> trash found, open gripper
-		elif self.currentState == 1 and singleFlag == True:
+		elif self.currentState == 1 and self.singleFlag == True:
 			self.moveGripper(1)
-			singleFlag = False
+			self.singleFlag = False
 		elif self.currentState == 3:
 			self.moveGripper(1)
 
