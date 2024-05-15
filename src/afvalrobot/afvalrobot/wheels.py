@@ -30,12 +30,12 @@ class Wheels(Node):
 	
 	def rotate_left(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0, 1.0
+		cmd.linear.x, cmd.angular.z = 0.0, 1.0
 		self.wheelsPublisher.publish(cmd)
 	
 	def rotate_right(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0, -1.0
+		cmd.linear.x, cmd.angular.z = 0.0, -1.0
 		self.wheelsPublisher.publish(cmd)
 		
 	def state_callback(self, msg):
