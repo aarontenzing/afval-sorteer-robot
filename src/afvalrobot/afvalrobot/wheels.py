@@ -76,13 +76,13 @@ class Wheels(Node):
 		self.camera = msg.data
 		self.get_logger().info('I heard direction: "%s"' % msg.data)
 
-		if self.currentState == 2 and self.camera == "left":
+		if self.camera == "left":
 			self.rotate_left()
 
-		elif self.currentState == 2 and self.camera == "right":
+		elif  self.camera == "right":
 			self.rotate_right()
 		
-		elif self.currentState == 2 and self.camera == "center":
+		elif  self.camera == "center":
 			self.start()
 		
 	
