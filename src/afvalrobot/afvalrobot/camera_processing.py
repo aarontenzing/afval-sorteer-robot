@@ -80,8 +80,10 @@ class CameraProcessing(Node):
             return
         var1, var2, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
+        stri ="Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
+        msg.data = stri
         self.publisher_.publish(msg)
+        self.get_logger().info(stri)
     
     def state_callback(self, msg):
         self.currentState = msg.data
