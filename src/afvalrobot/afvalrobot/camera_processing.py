@@ -95,7 +95,7 @@ class CameraProcessing(Node):
         if self.currentState == 0 or self.currentState == 1 :
             self.object_detect()
         else:
-            #self.get_logger().info('I execute vuilback_detect')
+            self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
 
 def detect_cola_can(image):
