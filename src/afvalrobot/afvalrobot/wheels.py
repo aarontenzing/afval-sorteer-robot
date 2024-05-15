@@ -85,9 +85,6 @@ class Wheels(Node):
 		elif self.currentState == 2 and self.camera == "center":
 			self.start()
 		
-		else:
-			self.rotate_left()
-
 	
 def main(args=None):
 	rclpy.init(args=args)
