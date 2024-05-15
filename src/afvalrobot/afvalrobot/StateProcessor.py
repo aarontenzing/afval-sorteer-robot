@@ -15,6 +15,12 @@ class StateProcessor(Node):
             self.camera_callback,  #subscriber callback function
             1                      #queue size
         )
+        self.trashDist = self.create_subscription(
+            Float32,                 #msg type
+            'trashDistance',         #topic name
+            self.dummy,  #subscriber callback function
+            1                      #queue size
+        )
         self.gripper_sub = self.create_subscription( #gripper
             Int32,                 #msg type
             'gripperState',         #topic name
@@ -45,36 +51,39 @@ class StateProcessor(Node):
             elif self.gripperState == 0 and self.prev == 1:
                 self.prev = 0
                 self.bot_state == 2
+                self.get_logger().info('From gripper: currentState change 1->2:')
         elif self.bot_state == 3 and self.gripperState == 1:         
             # gripper is open
             self.bot_state == 4
+            self.get_logger().info('From gripper: currentState change 3->4:')
+
         self.publish_state()
 
  
     def camera_callback(self, msg):
-        self.cameraState = msg.data
-        id = self.cameraState.split(':')[0].strip()
-        var = self.cameraStateplit(':')[1].strip().split(';')
-        distance = var[0]
-        h = var[1]
-        # var[2] is usually == 1 if nothing is detected then 0
-        if self.bot_state == 2:
-            if id == -1:
-                self.bot_state = 3
-        
+        self.cameraState = msg.data            
+        if self.trashDist.handle.get() == 1.5 and self.cameraState == 2:
+            self.bot_state = 3
+            self.get_logger().info('From camera: currentState change 2->3:')
+
+        elif self.cameraState != 'not' and self.cameraState == 0:
+            self.bot_state = 1
+            self.get_logger().info('From camera: currentState change 0->1:')
+
         self.publish_state()
 
     def sonar_callback(self,msg):
         self.sonarDist = msg.data
         if self.bot_state == 4 and self.sonarDist > 3*CLOSING_DISTANCE:
             self.bot_state == 0
-
+            self.get_logger().info('From camera: currentState change 4->0:')
         self.publish_state()
 
     def publish_state(self):
         msg = Int32()
         msg.data = self.bot_state
         self.state_publisher.publish(msg)
+        self.get_logger().info('I published state: %s' % msg.data)
                 
     def dummy():
         pass
