@@ -16,7 +16,7 @@ class CameraProcessing(Node):
 
         self.zoek="cola"
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
-        self.publisher_trashDistance = self.create_publisher(float, 'trashDistance', 1)
+        self.publisher_trashDistance = self.create_publisher(Float32, 'trashDistance', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
         self.cm = np.array([[823.93985557, 0., 322.76228491], [0., 825.11141958, 279.6240493], [0., 0., 1.]]) # Correction for cameralens
