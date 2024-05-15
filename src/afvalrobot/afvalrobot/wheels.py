@@ -61,7 +61,7 @@ class Wheels(Node):
 
 		# state 0: search object -> close to wall rotate 
 		if (self.currentState == 0 and self.distance < 10):
-			self.rotate()
+			self.rotate_left()
 			time.sleep(3)
 		
 		# state 1: found object -> drive straight to object
@@ -70,7 +70,7 @@ class Wheels(Node):
 
 		# state 2: find trash can
 		elif (self.currentState == 2 and self.distance < 5):
-			self.rotate()	
+			self.rotate_left()	
 
 	def camera_callback(self, msg):
 		self.camera = msg.data
