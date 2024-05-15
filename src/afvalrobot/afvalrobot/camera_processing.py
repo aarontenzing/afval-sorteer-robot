@@ -13,7 +13,7 @@ class CameraProcessing(Node):
         self.currentState = 0
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
 
-        self.zoek=""
+        self.zoek="-1"
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
@@ -82,7 +82,7 @@ class CameraProcessing(Node):
         msg = String()
 
         # id = 1 -> obj "0" and id = 3 -> obj "1"
-        if idfound == -1 or ((self.obj == '0' and idfound == 1) or (self.obj == "1" and idfound == 3)):
+        if idfound == -1 or ((self.zoek == '0' and idfound == 1) or (self.zoek == "1" and idfound == 3)):
             msg.data = "not"
         else:
             if angle < -0.2:
@@ -95,7 +95,7 @@ class CameraProcessing(Node):
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         self.publisher_.publish(msg)
         self.get_logger().info(msg.data)
-        self.get_logger().info('distance: %s' % str(distance))
+        self.get_logger().info("distance: " +  str(distance))
     
     def state_callback(self, msg):
         self.currentState = msg.data
