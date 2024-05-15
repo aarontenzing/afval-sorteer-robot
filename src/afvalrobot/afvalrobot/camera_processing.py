@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from math import sqrt
 from math import tan
-from std_msgs.msg import String, Int32
+from std_msgs.msg import String, Int32, Float32
 
 class CameraProcessing(Node):
     def __init__(self):
@@ -14,7 +14,9 @@ class CameraProcessing(Node):
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
 
 
+        self.zoek="cola"
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
+        self.publisher_trashDistance = self.create_publisher(Float32, 'trashDistance', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
         self.cm = np.array([[823.93985557, 0., 322.76228491], [0., 825.11141958, 279.6240493], [0., 0., 1.]]) # Correction for cameralens
@@ -63,7 +65,13 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        self.get_logger().info(detect_cola_can(frame))
+        msg = String()
+        obj=self.detect_cola_can(frame)
+        #if obj=="not":
+         #   self.detect_fanta_can(frame)
+        msg.data = obj
+        self.publisher_.publish(msg)
+        self.get_logger().info(obj)
 
         return
 
@@ -74,10 +82,28 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        var1, var2, var3, idfound = self.poseEstimation(frame)
+        distance, angle, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
-        self.publisher_.publish(msg)
+        msg_dist = Float32()
+
+        # id = 1 -> obj "cola" and id = 3 -> obj "1"
+        if idfound == -1 or ((self.zoek == '1' and idfound == 1) or (self.zoek == "cola" and idfound == 3)):
+            msg.data = "not"
+        else:
+            if angle < -0.2:
+                msg.data = "left"
+            elif angle > 0.2:
+                msg.data = "right"
+            else:
+                msg.data = "middle"
+            msg_dist.data = distance
+            self.publisher_.publish(msg)
+            self.publisher_trashDistance.publish(msg_dist)
+        
+        #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
+        #self.publisher_.publish(msg)
+        self.get_logger().info(msg.data)
+        self.get_logger().info("distance: %s" % msg_dist.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
@@ -86,48 +112,84 @@ class CameraProcessing(Node):
 
 
     def timer_callback(self):
-        if self.currentState == 0:
+        if self.currentState == 0 or self.currentState == 1 :
             self.object_detect()
         else:
             #self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
 
-def detect_cola_can(image):
+    def detect_fanta_can(self,image):
 
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    lower_red = np.array([0, 120, 70])
-    upper_red = np.array([10, 255, 255])
-    lower_red2 = np.array([170, 120, 70])
-    upper_red2 = np.array([180, 255, 255])
-    mask1 = cv2.inRange(hsv, lower_red, upper_red)
-    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-    mask = mask1 + mask2
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        lower_orange = np.array([15, 180, 220])  # Lower bound of HSV
+        upper_orange = np.array([25, 255, 255])  # Upper bound of HSV
+        mask = cv2.inRange(hsv, lower_orange, upper_orange)
+
     
 
-    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
-    image_center_x = image.shape[1] / 2
-    middle_tolerance = image.shape[1] * 0.10 
-    min_area_threshold = 200
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        image_center_x = image.shape[1] / 2
+        middle_tolerance = image.shape[1] * 0.10 
+        min_area_threshold = 200
 
-   
-    if contours:
-        largest_contour = max(contours, key=cv2.contourArea)
-        if cv2.contourArea(largest_contour) < min_area_threshold:
-            return "Can is too small or not detected"
+    
+        if contours:
+            largest_contour = max(contours, key=cv2.contourArea)
+            if cv2.contourArea(largest_contour) < min_area_threshold:
+                return "not"
+            else:
+                M = cv2.moments(largest_contour)
+                self.zoek="1"
+                if M["m00"] != 0:
+
+                    cx = int(M["m10"] / M["m00"])
+                    if cx < image_center_x - middle_tolerance:
+                        return "left"
+                    elif cx > image_center_x + middle_tolerance:
+                        return "right"
+                    else:
+                        return "middle"
         else:
-            M = cv2.moments(largest_contour)
-            if M["m00"] != 0:
+            return "not"
 
-                cx = int(M["m10"] / M["m00"])
-                if cx < image_center_x - middle_tolerance:
-                    return "left"
-                elif cx > image_center_x + middle_tolerance:
-                    return "right"
-                else:
-                    return "middle"
-    else:
-        return "Can not detected"
+    def detect_cola_can(self,image):
+
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        lower_red = np.array([0, 120, 70])
+        upper_red = np.array([10, 255, 255])
+        lower_red2 = np.array([170, 120, 70])
+        upper_red2 = np.array([180, 255, 255])
+        mask1 = cv2.inRange(hsv, lower_red, upper_red)
+        mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+        mask = mask1 + mask2
+    
+
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        image_center_x = image.shape[1] / 2
+        middle_tolerance = image.shape[1] * 0.10 
+        min_area_threshold = 200
+
+    
+        if contours:
+            largest_contour = max(contours, key=cv2.contourArea)
+            if cv2.contourArea(largest_contour) < min_area_threshold:
+                return "not"
+            else:
+                M = cv2.moments(largest_contour)
+                self.zoek="0"
+                if M["m00"] != 0:
+
+                    cx = int(M["m10"] / M["m00"])
+                    if cx < image_center_x - middle_tolerance:
+                        return "left"
+                    elif cx > image_center_x + middle_tolerance:
+                        return "right"
+                    else:
+                        return "middle"
+        else:
+            return "not"
 
 def main(args = None):
     rclpy.init(args = args)

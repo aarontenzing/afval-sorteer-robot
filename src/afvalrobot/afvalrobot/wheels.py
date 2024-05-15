@@ -37,6 +37,30 @@ class Wheels(Node):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0, -1.0
 		self.wheelsPublisher.publish(cmd)
+<<<<<<< HEAD
+=======
+		# Drive to object
+		while (self.distance > 5 and self.currentState == 1):
+			#self.get_logger().info('I heard state in while loop: "%s"' % self.currentState)
+			pass
+		# Stop
+		self.stop()
+		time.sleep(2)
+
+	def controlWheels(self, state):
+		
+		# Search object
+		if state == 0:
+			self.search()
+
+		# Found object
+		elif state == 1:
+			self.get_object()
+
+		# Stop
+		elif state == 2:
+			self.stop()
+>>>>>>> aed328bd8d09c96d5722deae0b528c5b1b584986
 		
 	def state_callback(self, msg):
 		self.currentState = msg.data
