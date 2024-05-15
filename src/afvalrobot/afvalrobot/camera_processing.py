@@ -81,7 +81,9 @@ class CameraProcessing(Node):
             return
         distance, angle, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        if idfound == -1:
+
+        # id = 1 -> obj "0" and id = 3 -> obj "1"
+        if idfound == -1 or ((self.obj == '0' and idfound == 1) or (self.obj = "1" and idfound = 3)):
             msg.data = "not"
         else:
             if angle < -0.2:
