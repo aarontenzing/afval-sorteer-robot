@@ -60,29 +60,29 @@ class Wheels(Node):
 		self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		# state 0: search object -> close to wall rotate 
-		if (self.currentState == 0 & self.distance < 10):
+		if (self.currentState == 0 and self.distance < 10):
 			self.rotate()
 			time.sleep(3)
 		
 		# state 1: found object -> drive straight to object
-		elif (self.currentState == 1 & self.distance < 5):
+		elif (self.currentState == 1 and self.distance < 5):
 			self.stop()
 
 		# state 2: find trash can
-		elif (self.currentState == 2 & self.distance < 5):
+		elif (self.currentState == 2 and self.distance < 5):
 			self.rotate()	
 
 	def camera_callback(self, msg):
 		self.camera = msg.data
 		self.get_logger().info('I heard direction: "%s"' % msg.data)
 
-		if self.currentState == 2 & self.camera == "left":
+		if self.currentState == 2 and self.camera == "left":
 			self.rotate_left()
 
-		elif self.currentState == 2 & self.camera == "right":
+		elif self.currentState == 2 and self.camera == "right":
 			self.rotate_right()
 		
-		elif self.currentState == 2 & self.camera == "center":
+		elif self.currentState == 2 and self.camera == "center":
 			self.start()
 		
 		else:
