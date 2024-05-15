@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int32, Float32
+from std_msgs.msg import Int32, Float32, String
 from geometry_msgs.msg import Twist
 import time
 
@@ -16,7 +16,7 @@ class Wheels(Node):
 		self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)		   
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
-		self.cameraSubcription = self.create_subcription(String, 'cameraState', self.camera_callback, 1)
+		self.cameraSubcription = self.create_subscription(String, 'cameraState', self.camera_callback, 1)
 	
 	def stop(self):
 		cmd = Twist()
