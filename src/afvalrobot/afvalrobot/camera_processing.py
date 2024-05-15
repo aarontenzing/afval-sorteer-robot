@@ -85,7 +85,7 @@ class CameraProcessing(Node):
         msg_dist = Float32()
 
         # id = 1 -> obj "cola" and id = 3 -> obj "1"
-        if idfound == -1 or ((self.zoek == 'cola' and idfound == 1) or (self.zoek == "1" and idfound == 3)):
+        if idfound == -1 or ((self.zoek == '1' and idfound == 1) or (self.zoek == "cola" and idfound == 3)):
             msg.data = "not"
         else:
             if angle < -0.2:
@@ -96,7 +96,7 @@ class CameraProcessing(Node):
                 msg.data = "middle"
             msg_dist.data = distance
             self.publisher_.publish(msg)
-            self.publisher_trashDistance.publish(msg)
+            self.publisher_trashDistance.publish(msg_dist)
         
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         #self.publisher_.publish(msg)
