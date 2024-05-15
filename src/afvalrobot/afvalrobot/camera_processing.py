@@ -13,7 +13,7 @@ class CameraProcessing(Node):
         self.currentState = 0
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
 
-        self.zoek="-1"
+        self.zoek="0"
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
