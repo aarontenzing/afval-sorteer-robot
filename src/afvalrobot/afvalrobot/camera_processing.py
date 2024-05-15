@@ -67,8 +67,8 @@ class CameraProcessing(Node):
             return
         msg = String()
         obj=self.detect_cola_can(frame)
-        if obj=="not":
-            self.detect_fanta_can(frame)
+        #if obj=="not":
+         #   self.detect_fanta_can(frame)
         msg.data = obj
         self.publisher_.publish(msg)
         self.get_logger().info(obj)
