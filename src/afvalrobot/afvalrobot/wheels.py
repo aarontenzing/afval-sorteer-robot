@@ -82,7 +82,7 @@ class Wheels(Node):
 		elif  self.camera == "right":
 			self.rotate_right()
 		
-		elif  self.camera == "center":
+		elif  self.camera == "middle":
 			self.start()
 		
 	
