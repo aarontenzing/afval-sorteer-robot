@@ -145,7 +145,7 @@ class CameraProcessing(Node):
                 return "not"
             else:
                 M = cv2.moments(largest_contour)
-                self.zoek="1"
+                self.zoek="fanta"
                 if M["m00"] != 0:
 
                     cx = int(M["m10"] / M["m00"])
@@ -183,7 +183,7 @@ class CameraProcessing(Node):
                 return "not"
             else:
                 M = cv2.moments(largest_contour)
-                self.zoek="0"
+                self.zoek="cola"
                 if M["m00"] != 0:
 
                     cx = int(M["m10"] / M["m00"])
