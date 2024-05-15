@@ -13,7 +13,8 @@ class CameraProcessing(Node):
         self.currentState = 0
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
 
-
+        self.obj=""
+        self.zoek=""
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
@@ -92,9 +93,12 @@ class CameraProcessing(Node):
         
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         self.publisher_.publish(msg)
+        self.get_logger().info(stri)
     
     def state_callback(self, msg):
         self.currentState = msg.data
+        if self.currentState==2:
+            self.zoek=self.obj
         self.get_logger().info('I heard state: %s' % msg.data)
 
 
@@ -131,6 +135,7 @@ def detect_cola_can(image):
             return "not"
         else:
             M = cv2.moments(largest_contour)
+            self.obj="0"
             if M["m00"] != 0:
 
                 cx = int(M["m10"] / M["m00"])
