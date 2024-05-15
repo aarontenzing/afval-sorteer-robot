@@ -110,7 +110,7 @@ class CameraProcessing(Node):
             #self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
 
-def detect_cola_can(image):
+def detect_cola_can(self,image):
 
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     lower_red = np.array([0, 120, 70])
