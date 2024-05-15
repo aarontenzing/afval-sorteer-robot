@@ -78,9 +78,19 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        var1, var2, var3, idfound = self.poseEstimation(frame)
+        distance, angle, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
+        if idfound == -1:
+            msg.data = "not"
+        else:
+            if angle < -0.2:
+                msg.data = "left"
+            elif angle > 0.2:
+                msg.data = "right"
+            else:
+                msg.data = "middle"
+        
+        #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         self.publisher_.publish(msg)
     
     def state_callback(self, msg):
@@ -93,7 +103,7 @@ class CameraProcessing(Node):
         if self.currentState == 0 or self.currentState == 1 :
             self.object_detect()
         else:
-            self.get_logger().info('I execute vuilback_detect')
+            #self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
 
 def detect_cola_can(image):
