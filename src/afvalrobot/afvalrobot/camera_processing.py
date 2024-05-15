@@ -64,7 +64,7 @@ class CameraProcessing(Node):
             self.get_logger().info('Failed to read frame from camera')
             return
         msg = String()
-        obj=detect_cola_can(frame)
+        obj=self.detect_cola_can(frame)
         msg.data = obj
         self.publisher_.publish(msg)
         self.get_logger().info(obj)
