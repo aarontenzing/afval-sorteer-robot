@@ -65,6 +65,8 @@ class CameraProcessing(Node):
             return
         msg = String()
         obj=self.detect_cola_can(frame)
+        if obj=="not":
+            self.detect_fanta_can(frame)
         msg.data = obj
         self.publisher_.publish(msg)
         self.get_logger().info(obj)
@@ -107,6 +109,41 @@ class CameraProcessing(Node):
         else:
             #self.get_logger().info('I execute vuilback_detect')
             self.trashcan_detect()
+
+    def detect_fanta_can(self,image):
+
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        lower_orange = np.array([15, 180, 220])  # Lower bound of HSV
+        upper_orange = np.array([25, 255, 255])  # Upper bound of HSV
+        mask = cv2.inRange(hsv, lower_orange, upper_orange)
+
+    
+
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        image_center_x = image.shape[1] / 2
+        middle_tolerance = image.shape[1] * 0.10 
+        min_area_threshold = 200
+
+    
+        if contours:
+            largest_contour = max(contours, key=cv2.contourArea)
+            if cv2.contourArea(largest_contour) < min_area_threshold:
+                return "not"
+            else:
+                M = cv2.moments(largest_contour)
+                self.zoek="1"
+                if M["m00"] != 0:
+
+                    cx = int(M["m10"] / M["m00"])
+                    if cx < image_center_x - middle_tolerance:
+                        return "left"
+                    elif cx > image_center_x + middle_tolerance:
+                        return "right"
+                    else:
+                        return "middle"
+        else:
+            return "not"
 
     def detect_cola_can(self,image):
 
