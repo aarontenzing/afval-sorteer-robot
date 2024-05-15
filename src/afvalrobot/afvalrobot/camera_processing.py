@@ -63,7 +63,11 @@ class CameraProcessing(Node):
         if not ret:
             self.get_logger().info('Failed to read frame from camera')
             return
-        self.get_logger().info(detect_cola_can(frame))
+        msg = String()
+        obj=detect_cola_can(frame)
+        msg.data = obj
+        self.publisher_.publish(msg)
+        self.get_logger().info(obj)
 
         return
 
@@ -114,7 +118,7 @@ def detect_cola_can(image):
     if contours:
         largest_contour = max(contours, key=cv2.contourArea)
         if cv2.contourArea(largest_contour) < min_area_threshold:
-            return "Can is too small or not detected"
+            return "not"
         else:
             M = cv2.moments(largest_contour)
             if M["m00"] != 0:
@@ -127,7 +131,7 @@ def detect_cola_can(image):
                 else:
                     return "middle"
     else:
-        return "Can not detected"
+        return "not"
 
 def main(args = None):
     rclpy.init(args = args)
