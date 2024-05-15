@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from math import sqrt
 from math import tan
-from std_msgs.msg import String, Int32
+from std_msgs.msg import String, Int32, Float32
 
 class CameraProcessing(Node):
     def __init__(self):
@@ -13,8 +13,10 @@ class CameraProcessing(Node):
         self.currentState = 0
         self.stateSubscription = self.create_subscription(Int32, 'currentState', self.state_callback, 1)
 
-        self.zoek=""
+
+        self.zoek="cola"
         self.publisher_ = self.create_publisher(String, 'cameraState', 1)
+        self.publisher_trashDistance = self.create_publisher(Float32, 'trashDistance', 1)
         self.camera = cv2.VideoCapture(0)
         self.dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
         self.cm = np.array([[823.93985557, 0., 322.76228491], [0., 825.11141958, 279.6240493], [0., 0., 1.]]) # Correction for cameralens
@@ -82,7 +84,10 @@ class CameraProcessing(Node):
             return
         distance, angle, var3, idfound = self.poseEstimation(frame)
         msg = String()
-        if idfound == -1:
+        msg_dist = Float32()
+
+        # id = 1 -> obj "cola" and id = 3 -> obj "1"
+        if idfound == -1 or ((self.zoek == '1' and idfound == 1) or (self.zoek == "cola" and idfound == 3)):
             msg.data = "not"
         else:
             if angle < -0.2:
@@ -91,11 +96,14 @@ class CameraProcessing(Node):
                 msg.data = "right"
             else:
                 msg.data = "middle"
+            msg_dist.data = distance
+            self.publisher_.publish(msg)
+            self.publisher_trashDistance.publish(msg_dist)
         
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
-        self.publisher_.publish(msg)
+        #self.publisher_.publish(msg)
         self.get_logger().info(msg.data)
-        self.get_logger().info('distance: '%distance)
+        self.get_logger().info("distance: %s" % msg_dist.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
