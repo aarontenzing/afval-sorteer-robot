@@ -28,6 +28,11 @@ class Wheels(Node):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
+
+	def start_slow(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = -0.07, 0.0
+		self.wheelsPublisher.publish(cmd)
 	
 	def back(self):
 		cmd = Twist()
@@ -64,7 +69,7 @@ class Wheels(Node):
 			
 		# state 1: drive to object
 		elif self.currentState == 1:
-			self.start()
+			self.start_slow()
 
 		# state 2: drive to trash can
 		elif self.currentState == 2:
@@ -89,7 +94,7 @@ class Wheels(Node):
 			self.start()
 		
 		# state 1: found object -> drive straight to object
-		elif (self.currentState == 1 and self.distance < 5):
+		elif (self.currentState == 1 and self.distance < 4):
 			self.stop()
 			time.sleep(1)
 
@@ -106,7 +111,7 @@ class Wheels(Node):
 				self.rotate_right_slow()
 			
 			elif  self.camera == "middle":
-				self.start()
+				self.start_slow()
 			
 			elif self.camera == "not":
 				self.counter += 1

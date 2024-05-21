@@ -80,6 +80,7 @@ class state_processor(Node):
     def sonar_callback(self,msg):
         self.sonarDist = msg.data
         if self.bot_state == 4 and self.sonarDist > 3*CLOSING_DISTANCE:
+            time.sleep(5)
             self.bot_state = 0
             self.publish_state()
             self.get_logger().info('From camera: currentState change 4->0:')
