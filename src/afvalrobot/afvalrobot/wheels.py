@@ -30,12 +30,12 @@ class Wheels(Node):
 	
 	def rotate_left(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, 1.0
+		cmd.linear.x, cmd.angular.z = 0.0, 0.5
 		self.wheelsPublisher.publish(cmd)
 	
 	def rotate_right(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, -1.0
+		cmd.linear.x, cmd.angular.z = 0.0, -0.5
 		self.wheelsPublisher.publish(cmd)
 		
 	def state_callback(self, msg):
@@ -62,7 +62,7 @@ class Wheels(Node):
 		# state 0: search object -> close to wall rotate 
 		if (self.currentState == 0 and self.distance < 10):
 			self.rotate_left()
-			time.sleep(3)
+			time.sleep(1)
 		
 		# state 1: found object -> drive straight to object
 		elif (self.currentState == 1 and self.distance < 5):
