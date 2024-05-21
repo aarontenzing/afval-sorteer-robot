@@ -38,12 +38,11 @@ class state_processor(Node):
             'currentState', #topic name 
             1        #queue size
         )
-        #self.timer = self.create_timer(0.3, self.process_state)
+        self.timer = self.create_timer(1.0, self.initPublish)
         self.bot_state = 0 #initial state
         self.prev = 0
         self.dist2Trash = 3.0 #Value that is larger than 1.5
-        self.publish_state()
-
+        self.initFlag = True
     def gripper_callback(self,msg):
         self.gripperState = msg.data
         if self.bot_state == 1:
@@ -87,7 +86,11 @@ class state_processor(Node):
         
     def trashDistCallback(self, msg):
         self.dist2Trash = msg.data
-
+        
+    def initPublish(self):
+        if self.initFlag == True:
+            self.publish_state()
+        self.initFlag = False
     def publish_state(self):
         msg = Int32()
         msg.data = self.bot_state
