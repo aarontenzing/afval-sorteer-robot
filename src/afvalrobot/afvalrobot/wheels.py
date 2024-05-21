@@ -17,7 +17,8 @@ class Wheels(Node):
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
 		self.cameraSubcription = self.create_subscription(String, 'cameraState', self.camera_callback, 1)
-	
+		self.counter = 0
+
 	def stop(self):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0.0, 0.0
@@ -30,12 +31,12 @@ class Wheels(Node):
 	
 	def rotate_left(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, 1.0
+		cmd.linear.x, cmd.angular.z = 0.0, 0.5
 		self.wheelsPublisher.publish(cmd)
 	
 	def rotate_right(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, -1.0
+		cmd.linear.x, cmd.angular.z = 0.0, -0.5
 		self.wheelsPublisher.publish(cmd)
 		
 	def state_callback(self, msg):
@@ -60,17 +61,22 @@ class Wheels(Node):
 		self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		# state 0: search object -> close to wall rotate 
-		if (self.currentState == 0 and self.distance < 10):
+		if (self.currentState == 0 and self.distance < 20):
 			self.rotate_left()
+<<<<<<< HEAD
 			#time.sleep(3)
+=======
+			time.sleep(2)
+>>>>>>> 79572ccd1f8f0973b3c0146face74dc887f8be8b
 		
 		# state 1: found object -> drive straight to object
-		elif (self.currentState == 1 and self.distance < 5):
+		elif (self.currentState == 1 and self.distance < 3):
 			self.stop()
 
 		# state 2: find trash can
-		elif (self.currentState == 2 and self.distance < 5):
-			self.rotate_left()	
+		elif (self.currentState == 2):
+			if (self.counter == 0):
+				self.rotate_left()	
 
 	def camera_callback(self, msg):
 		self.camera = msg.data
@@ -85,7 +91,15 @@ class Wheels(Node):
 			
 			elif  self.camera == "middle":
 				self.start()
-		
+			
+			elif self.camera == "not":
+				self.counter += 1
+
+			if self.counter >= 5 and self.currentState == 1:
+				self.counter = 0
+			elif self.counter >= 10 and self.currentState == 2:
+				self.counter = 0
+			
 	
 def main(args=None):
 	rclpy.init(args=args)
