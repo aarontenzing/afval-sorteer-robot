@@ -17,7 +17,8 @@ class Wheels(Node):
 		self.wheelsPublisher = self.create_publisher(Twist, '/cmd_vel', 1) 
 		self.distanceSubcription = self.create_subscription(Float32, 'distance', self.distance_callback, 1)
 		self.cameraSubcription = self.create_subscription(String, 'cameraState', self.camera_callback, 1)
-	
+		self.counter = 0
+
 	def stop(self):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0.0, 0.0
@@ -70,7 +71,8 @@ class Wheels(Node):
 
 		# state 2: find trash can
 		elif (self.currentState == 2 and self.distance < 5):
-			self.rotate_left()	
+			if (self.counter == 0):
+				self.rotate_left()	
 
 	def camera_callback(self, msg):
 		self.camera = msg.data
@@ -85,7 +87,12 @@ class Wheels(Node):
 			
 			elif  self.camera == "middle":
 				self.start()
-		
+			
+			elif self.camera == "not":
+				self.counter += 1
+
+			if self.counter >= 10:
+				self.counter = 0
 	
 def main(args=None):
 	rclpy.init(args=args)
