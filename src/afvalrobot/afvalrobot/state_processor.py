@@ -4,7 +4,7 @@ from std_msgs.msg import String, Float32, Int32
 
 CLOSING_DISTANCE = 5
 
-class StateProcessor(Node):
+class state_processor(Node):
 
     def __init__(self):
         super().__init__(type(self).__name__) #give this node the name of the class
@@ -62,7 +62,7 @@ class StateProcessor(Node):
  
     def camera_callback(self, msg):
         self.cameraState = msg.data            
-        if self.trashDist.handle.get() == 1.5 and self.cameraState == 2:
+        if self.trashDist.handle.get() == 1.5 and self.cameraState == 2: #self.bot_state ???
             self.bot_state = 3
             self.get_logger().info('From camera: currentState change 2->3:')
 
@@ -94,7 +94,7 @@ class StateProcessor(Node):
 def main(args=None):
     rclpy.init(args=args)
     #make new publisher object
-    node = StateProcessor()
+    node = state_processor()
     #keep node alive
     rclpy.spin(node)
 
