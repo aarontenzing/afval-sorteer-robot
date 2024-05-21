@@ -57,6 +57,7 @@ class Gripper(Node):
 		#Change state and distance to correct values
 		# State 1 and trash is close enough and gripper is open -> close gripper
 		if self.currentState == 1 and distance < CLOSING_DISTANCE:
+			timer.sleep(0.5)
 			self.moveGripper(0)
 
 	def moveGripper(self, state):
