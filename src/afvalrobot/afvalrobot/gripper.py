@@ -69,7 +69,7 @@ class Gripper(Node):
 		msg = Int32()
 		msg.data = state
 		self.publisher.publish(msg)
-		self.get_logger().info('Publishing: "%s"' % msg.data)
+		#self.get_logger().info('Publishing: "%s"' % msg.data)
 
 
 def main(args=None):

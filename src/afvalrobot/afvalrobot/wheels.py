@@ -75,7 +75,7 @@ class Wheels(Node):
 		elif self.currentState == 2:
 			self.back()
 			self.get_logger().info('I go back')
-			time.sleep(1)
+			#time.sleep(1)
 		elif self.currentState == 3:
 			self.stop()
 		elif self.currentState == 4:
@@ -87,7 +87,7 @@ class Wheels(Node):
 
 	def distance_callback(self, msg):
 		self.distance = msg.data
-		self.get_logger().info('I heard distance: "%s"' % msg.data)
+		#self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		# state 0: search object -> close to wall rotate 
 		if (self.currentState == 0 and self.distance < 20):
