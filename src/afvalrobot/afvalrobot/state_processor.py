@@ -42,6 +42,7 @@ class state_processor(Node):
         self.bot_state = 0 #initial state
         self.prev = 0
         self.dist2Trash = 3.0 #Value that is larger than 1.5
+        self.publish_state()
 
     def gripper_callback(self,msg):
         self.gripperState = msg.data
