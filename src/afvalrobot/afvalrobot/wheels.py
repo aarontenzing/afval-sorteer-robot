@@ -72,6 +72,7 @@ class Wheels(Node):
 		if (self.currentState == 0 and self.distance < 20):
 			self.rotate_left()
 			time.sleep(2)
+			self.start()
 		
 		# state 1: found object -> drive straight to object
 		elif (self.currentState == 1 and self.distance < 5):
