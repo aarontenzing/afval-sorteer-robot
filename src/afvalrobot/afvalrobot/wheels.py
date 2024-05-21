@@ -31,7 +31,7 @@ class Wheels(Node):
 
 	def start_slow(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = -0.07, 0.0
+		cmd.linear.x, cmd.angular.z = -0.085, 0.0
 		self.wheelsPublisher.publish(cmd)
 	
 	def back(self):
@@ -116,10 +116,12 @@ class Wheels(Node):
 			elif self.camera == "not":
 				self.counter += 1
 
+			# find trash
 			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
 				self.rotate_left_slow()	
-			elif self.counter >= 10 and self.currentState == 2:
+			# find aruco
+			elif self.counter >= 3 and self.currentState == 2:
 				self.counter = 0
 				self.rotate_left_slow()	
 			
