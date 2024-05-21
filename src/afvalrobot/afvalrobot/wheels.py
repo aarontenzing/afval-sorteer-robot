@@ -66,11 +66,11 @@ class Wheels(Node):
 			time.sleep(2)
 		
 		# state 1: found object -> drive straight to object
-		elif (self.currentState == 1 and self.distance < 5):
+		elif (self.currentState == 1 and self.distance < 3):
 			self.stop()
 
 		# state 2: find trash can
-		elif (self.currentState == 2 and self.distance < 5):
+		elif (self.currentState == 2):
 			if (self.counter == 0):
 				self.rotate_left()	
 
@@ -91,8 +91,11 @@ class Wheels(Node):
 			elif self.camera == "not":
 				self.counter += 1
 
-			if self.counter >= 10:
+			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
+			elif self.counter >= 10 and self.currentState == 2:
+				self.counter = 0
+			
 	
 def main(args=None):
 	rclpy.init(args=args)
