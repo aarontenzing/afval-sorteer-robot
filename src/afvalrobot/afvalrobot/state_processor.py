@@ -62,11 +62,11 @@ class state_processor(Node):
  
     def camera_callback(self, msg):
         self.cameraState = msg.data            
-        if self.trashDist.handle.get() == 1.5 and self.cameraState == 2: #self.bot_state ???
+        if self.trashDist.handle.get() == 1.5 and self.bot_state == 2:
             self.bot_state = 3
             self.get_logger().info('From camera: currentState change 2->3:')
 
-        elif self.cameraState != 'not' and self.cameraState == 0:
+        elif self.cameraState != 'not' and self.bot_state == 0:
             self.bot_state = 1
             self.get_logger().info('From camera: currentState change 0->1:')
 
