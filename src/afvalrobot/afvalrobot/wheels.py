@@ -121,12 +121,12 @@ class Wheels(Node):
 			# find trash
 			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
-				self.rotate_left()	
+				self.rotate_left_slow()	
 			# find aruco
 			elif self.counter >= 3 and self.currentState == 2:
 				self.counter = 0
 				self.get_logger().info('I rotate')
-				self.rotate_left()	
+				self.rotate_left_slow()	
 			
 	
 def main(args=None):
