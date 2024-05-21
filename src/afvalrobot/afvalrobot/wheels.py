@@ -117,6 +117,7 @@ class Wheels(Node):
 			
 			elif self.camera == "not":
 				self.counter += 1
+				self.get_logger().info('I count not' + counter)
 
 			# find trash
 			if self.counter >= 5 and self.currentState == 1:
