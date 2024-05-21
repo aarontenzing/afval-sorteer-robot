@@ -74,6 +74,7 @@ class Wheels(Node):
 		# state 2: drive to trash can
 		elif self.currentState == 2:
 			self.rotate_left()
+			time.sleep(1)
 		elif self.currentState == 3:
 			self.stop()
 		elif self.currentState == 4:
@@ -119,11 +120,11 @@ class Wheels(Node):
 			# find trash
 			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
-				self.rotate_left_slow()	
+				self.rotate_left()	
 			# find aruco
 			elif self.counter >= 3 and self.currentState == 2:
 				self.counter = 0
-				self.rotate_left_slow()	
+				self.rotate_left()	
 			
 	
 def main(args=None):
