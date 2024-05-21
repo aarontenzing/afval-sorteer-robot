@@ -90,9 +90,9 @@ class CameraProcessing(Node):
         if idfound == -1 or ((self.zoek == 'fanta' and idfound == 1) or (self.zoek == "cola" and idfound == 3)):
             msg.data = "not"
         else:
-            if angle < -0.2:
+            if angle < -0.25:
                 msg.data = "left"
-            elif angle > 0.2:
+            elif angle > 0.25:
                 msg.data = "right"
             else:
                 msg.data = "middle"
@@ -173,7 +173,7 @@ class CameraProcessing(Node):
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
         image_center_x = image.shape[1] / 2
-        middle_tolerance = image.shape[1] * 0.10 
+        middle_tolerance = image.shape[1] * 0.15 
         min_area_threshold = 200
 
     
