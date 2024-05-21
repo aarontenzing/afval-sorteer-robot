@@ -25,6 +25,7 @@ setup(
             'gripper = afvalrobot.gripper:main',
             'wheels = afvalrobot.wheels:main',
             'camera_processing = afvalrobot.camera_processing:main',
+            'state_processing = afvalrobot.state_processing:main',
         ],
     },
 )

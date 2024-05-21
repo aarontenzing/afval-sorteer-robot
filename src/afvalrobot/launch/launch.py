@@ -23,5 +23,10 @@ def generate_launch_description():
             package='afvalrobot',
             executable='camera_processing',
             name='camera_processing'
+        ),
+        Node(
+            package='afvalrobot',
+            executable='state_processing',
+            name='state_processing'
         )
     ])
