@@ -29,6 +29,11 @@ class Wheels(Node):
 		cmd.linear.x, cmd.angular.z = -0.1, 0.0
 		self.wheelsPublisher.publish(cmd)
 	
+	def back(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = 0.1, 0.0
+		self.wheelsPublisher.publish(cmd)
+
 	def rotate_left(self):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0.0, 0.5
@@ -54,6 +59,9 @@ class Wheels(Node):
 		# state 2: drive to trash can
 		elif self.currentState == 2:
 			self.start()
+
+		elif self.currentState == 3:
+			self.back()
 			
 
 	def distance_callback(self, msg):
@@ -70,7 +78,7 @@ class Wheels(Node):
 >>>>>>> 79572ccd1f8f0973b3c0146face74dc887f8be8b
 		
 		# state 1: found object -> drive straight to object
-		elif (self.currentState == 1 and self.distance < 3):
+		elif (self.currentState == 1 and self.distance < 5):
 			self.stop()
 
 		# state 2: find trash can
