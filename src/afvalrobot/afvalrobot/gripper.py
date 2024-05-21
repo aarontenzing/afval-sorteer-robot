@@ -5,7 +5,7 @@ import time
 from std_msgs.msg import Float32, Int32
 
 CLAW = 13
-CLOSING_DISTANCE = 5
+CLOSING_DISTANCE = 3
 
 
 GPIO.setmode(GPIO.BCM) #BCM is GPIO number
