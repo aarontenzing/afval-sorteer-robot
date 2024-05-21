@@ -82,7 +82,7 @@ class state_processor(Node):
     def publish_state(self):
         msg = Int32()
         msg.data = self.bot_state
-        self.state_publisher.publish(msg)
+        self.state.publish(msg)
         self.get_logger().info('I published state: %s' % msg.data)
                 
     def dummy():
