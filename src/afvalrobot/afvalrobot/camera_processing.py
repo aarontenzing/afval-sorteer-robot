@@ -101,9 +101,9 @@ class CameraProcessing(Node):
                 msg_dist.data = 1.5 # End reached
             else:
                 msg_dist.data = distance
-            
-            self.publisher_.publish(msg)
             self.publisher_trashDistance.publish(msg_dist)
+        self.publisher_.publish(msg)
+        
         
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         #self.publisher_.publish(msg)
