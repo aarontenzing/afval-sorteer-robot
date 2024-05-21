@@ -60,9 +60,9 @@ class Wheels(Node):
 		self.get_logger().info('I heard distance: "%s"' % msg.data)
 
 		# state 0: search object -> close to wall rotate 
-		if (self.currentState == 0 and self.distance < 10):
+		if (self.currentState == 0 and self.distance < 20):
 			self.rotate_left()
-			time.sleep(1)
+			time.sleep(2)
 		
 		# state 1: found object -> drive straight to object
 		elif (self.currentState == 1 and self.distance < 5):
