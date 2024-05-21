@@ -26,7 +26,7 @@ def generate_launch_description():
         ),
         Node(
             package='afvalrobot',
-            executable='state_processing',
-            name='state_processing'
+            executable='state_processor',
+            name='state_processor'
         )
     ])
