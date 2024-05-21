@@ -73,7 +73,8 @@ class Wheels(Node):
 
 		# state 2: drive to trash can
 		elif self.currentState == 2:
-			self.rotate_left()
+			self.back()
+			self.get_logger().info('I go back')
 			time.sleep(1)
 		elif self.currentState == 3:
 			self.stop()
@@ -124,6 +125,7 @@ class Wheels(Node):
 			# find aruco
 			elif self.counter >= 3 and self.currentState == 2:
 				self.counter = 0
+				self.get_logger().info('I rotate')
 				self.rotate_left()	
 			
 	
