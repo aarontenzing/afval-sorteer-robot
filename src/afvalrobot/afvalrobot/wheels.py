@@ -71,11 +71,7 @@ class Wheels(Node):
 		# state 0: search object -> close to wall rotate 
 		if (self.currentState == 0 and self.distance < 20):
 			self.rotate_left()
-<<<<<<< HEAD
-			#time.sleep(3)
-=======
 			time.sleep(2)
->>>>>>> 79572ccd1f8f0973b3c0146face74dc887f8be8b
 		
 		# state 1: found object -> drive straight to object
 		elif (self.currentState == 1 and self.distance < 5):
