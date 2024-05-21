@@ -36,12 +36,12 @@ class Wheels(Node):
 
 	def rotate_left(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, 0.5
+		cmd.linear.x, cmd.angular.z = 0.0, 0.2
 		self.wheelsPublisher.publish(cmd)
 	
 	def rotate_right(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, -0.5
+		cmd.linear.x, cmd.angular.z = 0.0, -0.2
 		self.wheelsPublisher.publish(cmd)
 		
 	def state_callback(self, msg):
@@ -59,9 +59,11 @@ class Wheels(Node):
 		# state 2: drive to trash can
 		elif self.currentState == 2:
 			self.start()
-
 		elif self.currentState == 3:
+			self.stop()
+		elif self.currentState == 4:
 			self.back()
+			time.sleep(3)
 			
 
 	def distance_callback(self, msg):
@@ -78,10 +80,6 @@ class Wheels(Node):
 		elif (self.currentState == 1 and self.distance < 5):
 			self.stop()
 
-		# state 2: find trash can
-		elif (self.currentState == 2):
-			if (self.counter == 0):
-				self.rotate_left()	
 
 	def camera_callback(self, msg):
 		self.camera = msg.data
@@ -102,8 +100,10 @@ class Wheels(Node):
 
 			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
+				self.rotate_left()	
 			elif self.counter >= 10 and self.currentState == 2:
 				self.counter = 0
+				self.rotate_left()	
 			
 	
 def main(args=None):
