@@ -107,12 +107,12 @@ class CameraProcessing(Node):
         
         #msg.data = "Location trashcan id " + str(idfound) + ":" + str(var1) + ";" + str(var2) + ";" + str(var3)
         #self.publisher_.publish(msg)
-        self.get_logger().info(msg.data)
-        self.get_logger().info("distance: %s" % msg_dist.data)
+        #self.get_logger().info(msg.data)
+        #.get_logger().info("distance: %s" % msg_dist.data)
     
     def state_callback(self, msg):
         self.currentState = msg.data
-        self.get_logger().info('I heard state: %s' % msg.data)
+        #self.get_logger().info('I heard state: %s' % msg.data)
 
 
 
