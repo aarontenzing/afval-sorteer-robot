@@ -46,12 +46,12 @@ class Wheels(Node):
 
 	def rotate_left_slow(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, 0.2
+		cmd.linear.x, cmd.angular.z = 0.0, 0.1
 		self.wheelsPublisher.publish(cmd)
 	
 	def rotate_right_slow(self):
 		cmd = Twist()
-		cmd.linear.x, cmd.angular.z = 0.0, -0.2
+		cmd.linear.x, cmd.angular.z = 0.0, -0.1
 		self.wheelsPublisher.publish(cmd)
 
 	def rotate_right(self):
