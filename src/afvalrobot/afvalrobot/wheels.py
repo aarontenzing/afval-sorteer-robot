@@ -92,7 +92,7 @@ class Wheels(Node):
 		# state 0: search object -> close to wall rotate 
 		if (self.currentState == 0 and self.distance < 20):
 			self.rotate_right()
-			time.sleep(2)
+			time.sleep(4)
 			self.start()
 		
 		# state 1: found object -> drive straight to object
