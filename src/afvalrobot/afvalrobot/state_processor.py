@@ -51,12 +51,12 @@ class state_processor(Node):
                 self.prev=1
             elif self.gripperState == 0 and self.prev == 1:
                 self.prev = 0
-                self.bot_state == 2
+                self.bot_state = 2
                 self.publish_state()
                 self.get_logger().info('From gripper: currentState change 1->2:')
         elif self.bot_state == 3 and self.gripperState == 1:         
             # gripper is open
-            self.bot_state == 4
+            self.bot_state = 4
             self.publish_state()
             self.get_logger().info('From gripper: currentState change 3->4:')
 
@@ -80,13 +80,13 @@ class state_processor(Node):
     def sonar_callback(self,msg):
         self.sonarDist = msg.data
         if self.bot_state == 4 and self.sonarDist > 3*CLOSING_DISTANCE:
-            self.bot_state == 0
+            self.bot_state = 0
             self.publish_state()
             self.get_logger().info('From camera: currentState change 4->0:')
         
     def trashDistCallback(self, msg):
         self.dist2Trash = msg.data
-        
+
     def initPublish(self):
         if self.initFlag == True:
             self.publish_state()
