@@ -24,7 +24,7 @@ setup(
             'sonar = afvalrobot.sonar:main',
             'gripper = afvalrobot.gripper:main',
             'wheels = afvalrobot.wheels:main',
-            'camera_processing = afvalrobot.camera_processer:main',
+            'camera_processing = afvalrobot.camera_processing:main',
             'state_processor = afvalrobot.state_processor:main',
         ],
     },

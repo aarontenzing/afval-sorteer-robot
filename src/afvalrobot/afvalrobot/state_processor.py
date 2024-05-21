@@ -38,7 +38,7 @@ class state_processor(Node):
             'currentState', #topic name 
             1        #queue size
         )
-        self.timer = self.create_timer(0.3, self.process_state)
+        #self.timer = self.create_timer(0.3, self.process_state)
         self.bot_state = 0 #initial state
         self.prev = 0
 
