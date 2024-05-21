@@ -36,12 +36,22 @@ class Wheels(Node):
 
 	def rotate_left(self):
 		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = 0.0, 0.5
+		self.wheelsPublisher.publish(cmd)
+
+	def rotate_left_slow(self):
+		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0.0, 0.2
 		self.wheelsPublisher.publish(cmd)
 	
-	def rotate_right(self):
+	def rotate_right_slow(self):
 		cmd = Twist()
 		cmd.linear.x, cmd.angular.z = 0.0, -0.2
+		self.wheelsPublisher.publish(cmd)
+
+	def rotate_right(self):
+		cmd = Twist()
+		cmd.linear.x, cmd.angular.z = 0.0, -0.5
 		self.wheelsPublisher.publish(cmd)
 		
 	def state_callback(self, msg):
@@ -58,12 +68,14 @@ class Wheels(Node):
 
 		# state 2: drive to trash can
 		elif self.currentState == 2:
-			self.start()
+			self.rotate_left()
 		elif self.currentState == 3:
 			self.stop()
 		elif self.currentState == 4:
 			self.back()
 			time.sleep(3)
+			self.rotate_left()
+			time.sleep(2)
 			
 
 	def distance_callback(self, msg):
@@ -79,6 +91,7 @@ class Wheels(Node):
 		# state 1: found object -> drive straight to object
 		elif (self.currentState == 1 and self.distance < 5):
 			self.stop()
+			time.sleep(1)
 
 
 	def camera_callback(self, msg):
@@ -87,10 +100,10 @@ class Wheels(Node):
 
 		if self.currentState == 1 or self.currentState == 2: 
 			if self.camera == "left":
-				self.rotate_left()
+				self.rotate_left_slow()
 
 			elif  self.camera == "right":
-				self.rotate_right()
+				self.rotate_right_slow()
 			
 			elif  self.camera == "middle":
 				self.start()
@@ -100,10 +113,10 @@ class Wheels(Node):
 
 			if self.counter >= 5 and self.currentState == 1:
 				self.counter = 0
-				self.rotate_left()	
+				self.rotate_left_slow()	
 			elif self.counter >= 10 and self.currentState == 2:
 				self.counter = 0
-				self.rotate_left()	
+				self.rotate_left_slow()	
 			
 	
 def main(args=None):
